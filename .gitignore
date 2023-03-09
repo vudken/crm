@@ -8,3 +8,76 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+
+# Symfony cache and logs
+/var/cache/*
+/var/log/*
+
+# Environment variables
+.env.local
+.env.local.php
+.env.*.local
+.env.*.local.php
+
+# Composer dependencies
+/vendor
+/bin/*
+!bin/console
+!bin/phpunit
+
+# Symfony's compiled files
+/var/bootstrap.php.cache
+/var/cache/*/*
+/var/cache/prod/*
+/var/cache/dev/*
+/var/cache/test/*
+/var/cache/warmup/*
+
+# Symfony's uploaded files
+/public/uploads/*
+
+# IDE and text editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.project
+*.buildpath
+*.settings/
+
+# Symfony's compiled translation files
+/var/translations/*
+
+# Symfony's Doctrine Migrations
+/src/Migrations/*
+
+# Symfony's profiler files
+/var/profiler/*
+
+# Symfony's tests
+/var/tests/*
+
+# Symfony's Dev environment files
+/dev/
+/bin/phpunit*
+/phpunit.xml
+
+# Symfony's .env
+/.env.local.php
+/.env.php
+
+# Symfony's security
+/var/secrets/*
+
+# Symfony's build artifacts
+/var/build/
+/public/bundles/
+/var/sessions/*
+/var/jwt/*
+###> symfony/webpack-encore-bundle ###
+/node_modules/
+/public/build/
+npm-debug.log
+yarn-error.log
+###< symfony/webpack-encore-bundle ###
