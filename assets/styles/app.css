@@ -8,8 +8,14 @@ html {
 }
 
 body {
-    background-color: lightgray;
+    background-color: rgba(199, 197, 197, 0.994);
     margin-bottom: 60px;
+}
+
+h1 {
+    font-size: 40px;
+    margin-left: 80px;
+    margin-top: 20px;
 }
 
 footer {
@@ -19,6 +25,7 @@ footer {
     height: 60px;
 }
 
+/* 
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -31,4 +38,4 @@ footer {
     .bd-placeholder-img-lg {
         font-size: 3.5rem;
     }
-}
+} */
