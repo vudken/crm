@@ -53,12 +53,11 @@ class RepairWorksController extends AbstractController
                 }
 
                 $this->em->flush();
+
+                return $this->redirect('/success');
             } else {
                 return $this->redirect('/');
             }
-
-            // dd($works);
-            return $this->render('success.html.twig');
         }
 
         return $this->render('repairWorks.html.twig', [
