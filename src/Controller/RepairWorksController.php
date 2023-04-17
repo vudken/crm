@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Work;
 use App\Form\WorkFormType;
+use App\Service\Util;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,27 +33,37 @@ class RepairWorksController extends AbstractController
             $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
 
             if ($fileExtension === 'xlsx' || $fileExtension === 'xls') {
-                // Load the file into a PhpSpreadsheet object
                 $spreadsheet = IOFactory::load($file);
-                // Get the first sheet in the Excel file
-                $worksheet = $spreadsheet->getActiveSheet();
+                $sheet = $spreadsheet->getActiveSheet();
+
+                $util = new Util();
+                $firstRow = $sheet->getRowIterator()->current();
+                $letters[] = $util->getColumnLetterByValue($firstRow, 'Address');
+                $letters[] = $util->getColumnLetterByValue($firstRow, 'Description');
+                $letters[] = $util->getColumnLetterByValue($firstRow, 'Material');
 
                 $works = [];
-                foreach ($worksheet->getRowIterator(2) as $row) {
+                foreach ($sheet->getRowIterator(2) as $row) {
                     $entity = new Work();
-                    $entity->setName($worksheet->getCell('A' . $row->getRowIndex())->getValue());
-                    $entity->setAddress($worksheet->getCell('B' . $row->getRowIndex())->getValue());
-                    $entity->setDescription($worksheet->getCell('C' . $row->getRowIndex())->getValue());
+                    $entity->setAddress($sheet->getCell($letters[0] . $row->getRowIndex())->getValue());
+                    $entity->setDescription($sheet->getCell($letters[1] . $row->getRowIndex())->getValue());
+                    $entity->setMaterial($sheet->getCell($letters[2] . $row->getRowIndex())->getValue());
 
-                    // Add the entity to the array
                     $works[] = $entity;
                 }
 
                 foreach ($works as $work) {
-                    $this->em->persist($work);
-                }
+                    $existingWork =  $this->em->getRepository(Work::class)->findOneBy([
+                        'description' => $work->getDescription(),
+                        'address' => $work->getAddress()
+                    ]);
 
-                $this->em->flush();
+                    if (!$existingWork instanceof Work) {
+                        $this->em->persist($work);
+                    }
+
+                    $this->em->flush();
+                }
 
                 return $this->redirect('/success');
             } else {
