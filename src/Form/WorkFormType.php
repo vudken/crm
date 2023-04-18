@@ -18,7 +18,7 @@ class WorkFormType extends AbstractType
             // ->add('description')
             ->add('attachment', FileType::class, [
                 'mapped' => false,
-                'label' => 'Please upload an appropriate Excel file'
+                'label' => 'Add new works as Excel file'
             ])
         ;
     }               
