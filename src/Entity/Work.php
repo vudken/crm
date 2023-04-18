@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: WorkRepository::class)]
 class Work
 {
+    const CHECK_INFO_TXT = 'Уточните у работадателя';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -22,9 +24,9 @@ class Work
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $material = null;
-    
-    #[ORM\Column(nullable: true)]
-    private ?bool $isCompleted = null;
+
+    #[ORM\Column(options: ['default' => 0])]
+    private ?bool $isCompleted = false;
 
     public function getId(): ?int
     {
@@ -50,7 +52,7 @@ class Work
 
     public function setDescription(?string $description): self
     {
-        $this->description = $description;
+        $this->description = $description ? $description : self::CHECK_INFO_TXT;
 
         return $this;
     }
@@ -62,17 +64,17 @@ class Work
 
     public function setMaterial(?string $material): self
     {
-        $this->material = $material;
+        $this->material = $material ? $material : self::CHECK_INFO_TXT;
 
         return $this;
     }
 
-    public function isIsCompleted(): ?bool
+    public function isIsCompleted(): bool
     {
         return $this->isCompleted;
     }
 
-    public function setIsCompleted(?bool $isCompleted): self
+    public function setIsCompleted(bool $isCompleted): self
     {
         $this->isCompleted = $isCompleted;
 

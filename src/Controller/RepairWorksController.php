@@ -53,17 +53,21 @@ class RepairWorksController extends AbstractController
                 }
 
                 foreach ($works as $work) {
-                    $existingWork =  $this->em->getRepository(Work::class)->findOneBy([
-                        'description' => $work->getDescription(),
-                        'address' => $work->getAddress()
-                    ]);
+                    $address = $work->getAddress();
 
-                    if (!$existingWork instanceof Work) {
-                        $this->em->persist($work);
+                    if (isset($address) && !empty($address)) {
+                        $existingWork =  $this->em->getRepository(Work::class)->findOneBy([
+                            'description' => $work->getDescription(),
+                            'address' => $address
+                        ]);
+
+                        if (!$existingWork instanceof Work) {
+                            $this->em->persist($work);
+                        }
                     }
-
-                    $this->em->flush();
                 }
+
+                $this->em->flush();
 
                 return $this->redirect('/success');
             } else {
