@@ -4,16 +4,16 @@ var gulp = require("gulp"),
 
 // copy html files from src folder to dist folder, also copy favicons
 const copyHtml = function () {
-    const baseTemplates = vars.getBaseTemplatesPath() + 'view/';
+    const baseViews = vars.getBaseTemplatesPath() + 'view/';
     const out = vars.getBaseBuildPath();
 
     // copy partials
 
     return gulp
         .src([
-            baseTemplates + "*.html",
-            baseTemplates + "*.ico", // favicons
-            baseTemplates + "*.png"
+            baseViews + "*.html",
+            baseViews + "*.ico", // favicons
+            baseViews + "*.png"
         ])
         .pipe(fileinclude({
             prefix: '@@',
