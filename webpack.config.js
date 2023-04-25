@@ -1,4 +1,8 @@
 const Encore = require('@symfony/webpack-encore');
+const tailwindcss = require('tailwindcss');
+const autoprefixer = require('autoprefixer');
+const tailwindConfig = require('./tailwind.config.js');
+const postCss = ('postcss-import');
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -21,6 +25,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addEntry('repairWorks', './assets/javascript/repairWorks.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -72,13 +77,22 @@ Encore
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
 
-    //     .enablePostCssLoader((options) => {
-    //         options.postcssOptions = {
-    //             config: './postcss.config.js'
-    //         };
-    //     })
-    // ;
-
+    .enablePostCssLoader((options) => {
+        options.postcssOptions = {
+            config: './postcss.config.js',
+            // plugins: [
+            //     tailwindcss(),
+            //     autoprefixer(),
+            // ],
+            // plugins: [
+            //     tailwindcss(),
+            //     autoprefixer()
+            // ],
+        };
+    })
+    // tailwindcss('./tailwind.config.js'),
+    // require('postcss-import'),
+    // require('autoprefixer'),
     .copyFiles({
         from: './assets/images',
         to: 'images/[path][name].[hash:8].[ext]',

@@ -21,6 +21,16 @@ class RepairWorksController extends AbstractController
     }
 
     #[Route('/repair_works', name: 'repair_works')]
+    public function index()
+    {
+        $works = $this->em->getRepository(Work::class)->findAll();
+
+        return $this->render('works/index.html.twig', [
+            'works' => $works,
+        ]);
+    }
+
+    #[Route('/add_repair_works', name: 'add_repair_works')]
     public function upload(Request $request): Response
     {
         $work = new Work();
