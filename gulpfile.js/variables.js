@@ -13,7 +13,7 @@ var FOLDER_PATHS = {
     baseSrc: "src/", // source files
     baseBuild: "public/build/", // build files
     baseAssets: "assets/", // base assets
-    baseTemplates: "templates/"
+    baseViews: "templates/views/"
 };
 
 // const selectedDemo = (args['demo'] ? (AVAILABLE_DEMOS.indexOf(args['demo']) >= 0 ? args['demo'] : null) : null) ? args['demo'] : DEFAULT_DEMO;
@@ -35,7 +35,7 @@ module.exports = {
     getBaseSrcPath: function () { return FOLDER_PATHS.baseSrc },
     getBaseBuildPath: function () { return FOLDER_PATHS.baseBuild },
     getBaseAssetsPath: function () { return FOLDER_PATHS.baseAssets },
-    getBaseTemplatesPath: function () { return FOLDER_PATHS.baseTemplates },
+    getBaseViewsPath: function () { return FOLDER_PATHS.baseViews },
     // getSrcPath: getSrcFolderPath,
     // getBuildPath: getBuildFolderPath,
     getBuildAssetsPath: function () { return FOLDER_PATHS.baseBuild + 'assets/' },

@@ -30,7 +30,7 @@ scrollTo = function (element, to, duration) {
         }
     };
     animateScroll();
-}
+};
 
 
 !function ($) {
@@ -38,7 +38,7 @@ scrollTo = function (element, to, duration) {
 
     var LeftSidebar = function () {
         this.body = $('body'),
-            this.window = $(window)
+            this.window = $(window);
     };
 
     /**
@@ -280,7 +280,7 @@ scrollTo = function (element, to, duration) {
             });
         },
 
-        $.LeftSidebar = new LeftSidebar, $.LeftSidebar.Constructor = LeftSidebar
+        $.LeftSidebar = new LeftSidebar, $.LeftSidebar.Constructor = LeftSidebar;
 }(window.jQuery),
 
 
@@ -293,7 +293,7 @@ scrollTo = function (element, to, duration) {
 
         var Topbar = function () {
             this.body = $('body'),
-                this.window = $(window)
+                this.window = $(window);
         };
 
         /**
@@ -360,7 +360,7 @@ scrollTo = function (element, to, duration) {
             Topbar.prototype.init = function () {
                 this.initMenu();
             },
-            $.Topbar = new Topbar, $.Topbar.Constructor = Topbar
+            $.Topbar = new Topbar, $.Topbar.Constructor = Topbar;
     }(window.jQuery),
 
 
@@ -373,7 +373,7 @@ scrollTo = function (element, to, duration) {
 
         var RightBar = function () {
             this.body = $('body'),
-                this.window = $(window)
+                this.window = $(window);
         };
 
         /** 
@@ -494,7 +494,7 @@ scrollTo = function (element, to, duration) {
                 });
             },
 
-            $.RightBar = new RightBar, $.RightBar.Constructor = RightBar
+            $.RightBar = new RightBar, $.RightBar.Constructor = RightBar;
     }(window.jQuery),
 
 
@@ -543,7 +543,7 @@ scrollTo = function (element, to, duration) {
                 }
                 this._saveConfig(newObj);
 
-            }
+            };
 
         /**
          * Loads the config - takes from body if available else uses default one
@@ -615,12 +615,12 @@ scrollTo = function (element, to, duration) {
                 switch (mode) {
                     case "dark": {
                         if (document.getElementById('bs-stylesheet').href.includes('rtl.min.css')) {
-                            this.defaultBSStyle.attr('href', 'assets/css/bootstrap-dark-rtl.min.css');
-                            this.defaultAppStyle.attr('href', 'assets/css/app-dark-rtl.min.css');
+                            this.defaultBSStyle.attr('href', 'build/assets/css/bootstrap-dark-rtl.min.css');
+                            this.defaultAppStyle.attr('href', 'build/assets/css/app-dark-rtl.min.css');
                         }
                         else {
-                            this.defaultBSStyle.attr('href', 'assets/css/bootstrap-dark.min.css');
-                            this.defaultAppStyle.attr('href', 'assets/css/app-dark.min.css');
+                            this.defaultBSStyle.attr('href', 'build/assets/css/bootstrap-dark.min.css');
+                            this.defaultAppStyle.attr('href', 'build/assets/css/app-dark.min.css');
                         }
 
                         if (notChangeSidebar)
@@ -634,12 +634,13 @@ scrollTo = function (element, to, duration) {
                     default: {
 
                         if (document.getElementById('bs-stylesheet').href.includes('rtl.min.css')) {
-                            this.defaultBSStyle.attr('href', 'assets/css/bootstrap-rtl.min.css');
-                            this.defaultAppStyle.attr('href', 'assets/css/app-rtl.min.css');
+                            this.defaultBSStyle.attr('href', 'build/assets/css/bootstrap-rtl.min.css');
+                            this.defaultAppStyle.attr('href', 'build/assets/css/app-rtl.min.css');
                         }
                         else {
-                            this.defaultBSStyle.attr('href', 'assets/css/bootstrap.min.css');
-                            this.defaultAppStyle.attr('href', 'assets/css/app.min.css');
+                            this.defaultBSStyle.attr('href', 'build/assets/css/bootstrap.min.css');
+                            this.defaultAppStyle.attr('href', 'build/assets/css/app.min.css');
+                            // this.defaultAppStyle.attr('href', "{{ asset('build/assets/css/app.min.css') }}");
                         }
 
                         if (notChangeSidebar)
@@ -653,7 +654,7 @@ scrollTo = function (element, to, duration) {
                 }
 
                 this.rightBar.selectOptionsFromConfig();
-            }
+            };
 
         /**
          * Changes the width of layout
@@ -677,7 +678,7 @@ scrollTo = function (element, to, duration) {
                 }
             }
             this.rightBar.selectOptionsFromConfig();
-        }
+        };
 
         /**
          * Changes menu positions
@@ -686,7 +687,7 @@ scrollTo = function (element, to, duration) {
             this.body.attr("data-layout-menu-position", position);
             this.updateConfig("menuPosition", position);
 
-        }
+        };
 
         /**
          * Clear out the saved config
@@ -724,5 +725,5 @@ scrollTo = function (element, to, duration) {
                 this.applyConfig();
             },
 
-            $.LayoutThemeApp = new LayoutThemeApp, $.LayoutThemeApp.Constructor = LayoutThemeApp
+            $.LayoutThemeApp = new LayoutThemeApp, $.LayoutThemeApp.Constructor = LayoutThemeApp;
     }(window.jQuery);

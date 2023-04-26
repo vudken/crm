@@ -24,7 +24,7 @@ File: Chat init js
             this.$chatInput.focus();
             return false;
         } else {
-            $('<li class="clearfix odd"><div class="chat-avatar"><img src="assets/images/users/avatar-1.jpg" alt="male"><i>' + chatTime + '</i></div><div class="conversation-text"><div class="ctext-wrap"><i>Nik</i><p>' + chatText + '</p></div></div></li>').appendTo('.conversation-list');
+            $(`<li class="clearfix odd"><div class="chat-avatar"><img src="{{ asset('build/assets/images/users/avatar-1.jpg') }}" alt="male"><i>` + chatTime + '</i></div><div class="conversation-text"><div class="ctext-wrap"><i>Nik</i><p>' + chatText + '</p></div></div></li>').appendTo('.conversation-list');
             this.$chatInput.focus();
             this.$chatList.animate({ scrollTop: this.$chatList.prop("scrollHeight") + 100 }, 1000);
             return true;

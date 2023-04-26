@@ -40,17 +40,17 @@ function reloadBrowserSync(done) {
 
 // Watches the changes
 function watchFiles() {
-    const srcPath = vars.getBaseSrcPath();
+    const baseViews = vars.getBaseViewsPath();
     const baseAssets = vars.getBaseAssetsPath();
 
-    gulp.watch(srcPath + "**", gulp.series('copyHtml', reloadBrowserSync));
+    // gulp.watch(baseViews + "**", gulp.series('copyHtml', reloadBrowserSync));
     gulp.watch(baseAssets + "images/**/*", gulp.series('copyImages', reloadBrowserSync));
     gulp.watch(baseAssets + "fonts/**/*", gulp.series('copyFonts', reloadBrowserSync));
     gulp.watch([baseAssets + "scss/**/*", "!" + baseAssets + "scss/icons.scss", "!" + baseAssets, "!" + baseAssets + "scss/config/**"], gulp.series('compileScss', reloadBrowserSync));
     gulp.watch(baseAssets + "scss/config/**", gulp.series('compileScss', 'compileBootstrap', reloadBrowserSync));
     gulp.watch(baseAssets + "scss/icons.scss", gulp.series('compileIcon', reloadBrowserSync));
     gulp.watch(baseAssets + "js/**/*", gulp.series("compileJs", reloadBrowserSync));
-    gulp.watch(baseAssets + 'templates/**/*', gulp.series("compileTwig", reloadBrowserSync));
+    // gulp.watch(baseAssets + '*.twig', gulp.series("compileTwig", reloadBrowserSync));
 }
 
 
@@ -68,7 +68,7 @@ gulp.task("clean", gulp.series('clean'));
 gulp.task("watch", gulp.parallel(watchFiles, initBrowserSync));
 
 // Default Task
-gulp.task('default', gulp.series('copyLibs', 'compileBootstrap', 'compileScss', 'compileIcon', 'copyAssets', 'copyHtml', 'copyImages', 'copyFonts', 'compileJs', "compileTwig", 'watch'), function (done) { done(); });
+gulp.task('default', gulp.series('copyLibs', 'compileBootstrap', 'compileScss', 'compileIcon', 'copyAssets',  'copyImages', 'copyFonts', 'compileJs', 'watch'), function (done) { done(); });
 
 // Build Task
-gulp.task("build", gulp.series('copyLibs', 'compileBootstrap', 'compileScss', 'compileIcon', 'copyAssets', 'copyHtml', 'copyImages', 'copyFonts', 'compileJs', "compileTwig"));
+gulp.task("build", gulp.series('copyLibs', 'compileBootstrap', 'compileScss', 'compileIcon', 'copyAssets',  'copyImages', 'copyFonts', 'compileJs'));
