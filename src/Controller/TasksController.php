@@ -13,9 +13,9 @@ class TasksController extends AbstractController
     #[Route('/tasks', name: 'tasks')]
     public function index(): Response
     {
-        $emails = Email::cases();
-        $fc = new FleetCompleteApi();
-        $tasks = $fc->getTasksByEmail(Email::Avd->value);
+        // $emails = Email::cases();
+        // $fc = new FleetCompleteApi();
+        // $tasks = $fc->getTasksByEmail(Email::Avd->value);
         // $tasks = $fc->getAllTasks();
         // dd($tasks);
 
