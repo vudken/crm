@@ -5,7 +5,10 @@ namespace App\Service;
 use App\Entity\Task;
 use App\Enum\Email;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Promise\Utils;
 use Symfony\Component\Dotenv\Dotenv;
+
 
 class FleetCompleteApi
 {
@@ -17,6 +20,7 @@ class FleetCompleteApi
             // 'verify' => false,
             // 'debug' => true,
             'http_errors' => true,
+            'base_uri' => 'https://app.ecofleet.com'
         ]);
 
         $dotenv = new Dotenv();
@@ -25,26 +29,37 @@ class FleetCompleteApi
 
     public function getTasksByEmail(string $email, $timePeriod = null): array
     {
-        $url = 'https://app.ecofleet.com/seeme/Api/Tasks/get';
-        $params = [
+        $request = new Request('GET', '/seeme/Api/Tasks/get');
+        $promise = $this->client->sendAsync($request, [
             'query' => [
                 // 'begTimestamp' => date('Y-m-d', strtotime($timePeriod == null ? '-2 weeks' : $timePeriod)),
-                'begTimestamp' => '2023-03-01',
+                'begTimestamp' => '2023-04-01',
+                // 'endTimestamp' => '2023-04-01',
                 'driver' => $email,
                 '__proto__' => '',
                 'key' => $_ENV['API_KEY'],
-                'json' => ''
+                'json'  => ''
             ]
-        ];
+        ])->then(function ($response) {
+            return json_decode($response->getBody(), true)['response']['tasks'];
+        });;
 
-        $response = $this->client->get($url, $params);
-        $data = json_decode($response->getBody(), true);
-        $tasksData = $data['response']['tasks']['___xmlNodeValues'];
-        echo "Amount of tasks for email $email is: " . count($tasksData) . PHP_EOL;
+        $results = Utils::unwrap($promise);
+        $results = Utils::settle(
+            $promise
+        )->wait();
 
+        $data = $results[0]['value'];
         $tasks = [];
-        foreach ($tasksData as $taskData) {
-            $tasks[] = new Task($taskData['task']);
+
+        if (!empty($data)) {
+            $data = $data['___xmlNodeValues'];
+
+            echo "Amount of tasks for email $email is: " . count($data) . PHP_EOL;
+
+            foreach ($data as $taskData) {
+                $tasks[] = new Task($taskData['task']);
+            }
         }
 
         return $tasks;

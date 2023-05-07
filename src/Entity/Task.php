@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use App\Service\Util;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -68,26 +69,33 @@ class Task
     #[ORM\Column(nullable: true)]
     private ?string $dbCreatedAtTimestamp = null;
 
+    #[ORM\Column(length: 10, nullable: true)]
+    private ?string $postalCode = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $time = null;
+
     public function __construct(array $data)
     {
         $this->taskId = $data['id'];
         $this->externalId = $data['externalId'];
         $this->name = $data['name'];
-        $this->timestamp = $data['timestamp'];
+        $this->timestamp = Util::formatDate($data['timestamp']);
         $this->status = $data['status'];
         $this->type = $data['type'];
         $this->description = $data['description'];
         $this->message = $data['message'];
         $this->driverName = $data['driver']['name'];
         $this->driverEmail = $data['driver']['email'];
-        $this->address = $data['location']['address'];
+        $this->address = Util::formatAddress($data['location']['address']);
         $this->customer = $data['customer'];
-        $this->customerExternalId = $data['customerExternalId'];
+        $this->customerExternalId = isset($data['customerExternalId']) ? (int) $data['customerExternalId'] : null;
         $this->customerName = $data['customerName'];
         $this->lastEditTimestamp = $data['lastEditTimestamp'];
         $this->createdAtTimestamp = $data['createdAtTimestamp'];
         $this->lockedAtTimestamp = $data['lockedAtTimestamp'];
         $this->dbCreatedAtTimestamp = $data['dbCreatedAtTimestamp'];
+        $this->postalCode = Util::getPostalCodeFromAddress($data['location']['address']);
     }
 
     public function getId(): ?int
@@ -307,6 +315,30 @@ class Task
     public function setDbCreatedAtTimestamp(?string $dbCreatedAtTimestamp): self
     {
         $this->dbCreatedAtTimestamp = $dbCreatedAtTimestamp;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
+
+        return $this;
+    }
+
+    public function getTime(): ?string
+    {
+        return $this->time;
+    }
+
+    public function setTime(?string $time): self
+    {
+        $this->time = $time;
 
         return $this;
     }
