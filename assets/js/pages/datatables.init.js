@@ -6,10 +6,10 @@ Contact: support@coderthemes.com
 File: Datatables init js
 */
 
-$(document).ready(function() {
+$.fn.dataTable.ext.errMode = 'throw';
+$.fn.dataTable.moment('DD.MM.YYYY');
 
-    
-
+$(document).ready(function () {
     // Default Datatable
     $('#basic-datatable').DataTable({
         "language": {
@@ -74,7 +74,7 @@ $(document).ready(function() {
     });
 
     table.buttons().container()
-            .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+        .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
 
     // Alternative Pagination Datatable
@@ -87,9 +87,9 @@ $(document).ready(function() {
 
     // Scroll Vertical Datatable
     $('#scroll-vertical-datatable').DataTable({
-        "scrollY":        "350px",
+        "scrollY": "350px",
         "scrollCollapse": true,
-        "paging":         false,
+        "paging": false,
         "language": {
             "paginate": {
                 "previous": "<i class='mdi mdi-chevron-left'>",
@@ -126,10 +126,10 @@ $(document).ready(function() {
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
         },
-        "columnDefs": [ {
+        "columnDefs": [{
             "visible": false,
             "targets": -1
-        } ]
+        }]
     });
 
     // Row created callback Datatable
@@ -143,8 +143,8 @@ $(document).ready(function() {
         "drawCallback": function () {
             $('.dataTables_paginate > .pagination').addClass('pagination-rounded');
         },
-        "createdRow": function ( row, data, index ) {
-            if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
+        "createdRow": function (row, data, index) {
+            if (data[5].replace(/[\$,]/g, '') * 1 > 150000) {
                 $('td', row).eq(5).addClass('text-danger');
             }
         }

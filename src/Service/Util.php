@@ -8,22 +8,35 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Row;
 
 class Util
 {
-    public function getColumnLetterByValue(Row $row, String $value): String
+    public static function formatTaskAddress(String $address): String
     {
-        foreach ($row->getCellIterator() as $cell) {
-            if ($cell->getValue() == $value) {
-                $column = $cell->getColumn();
-                return $column;
-            }
-        }
-
-        throw new Exception('Column not found');
+        return trim(explode(',', $address)[0]);
     }
 
-    public static function formatDate(String $date): String
+    public static function formatTaskDate(String $timestamp): String
     {
-        $date = new DateTime($date);
-        return $date->format('d.m.Y');
+        $dateTime = new DateTime($timestamp);
+        return $dateTime->format('d.m.Y');
+    }
+
+    public static function formatDateForFC(string $timestamp): string
+    {
+        $dateTime = DateTime::createFromFormat('d.m.Y', $timestamp);
+
+        if (!$dateTime) {
+            throw new Exception('Invalid date format: ' . $timestamp . PHP_EOL . 'Proper date format: d.m.Y' . PHP_EOL . 'An example of a proper date: 01.12.2022 or 1.12.22');
+        }
+
+        $date = $dateTime->format('Y-m-d');
+        $year = $dateTime->format('y');
+
+        return '20' . $year . substr($date, 4);
+    }
+
+    public static function formatTaskTime(String $timestamp): String
+    {
+        $dateTime = new DateTime($timestamp);
+        return $dateTime->format('H:i');
     }
 
     public static function getPostalCodeFromAddress(String $address): String
@@ -36,22 +49,15 @@ class Util
         return mb_strtoupper($postalCode);
     }
 
-    public static function formatAddress(String $address): String
+    public function getColumnLetterByValue(Row $row, String $value): String
     {
-        return explode(',', $address)[0];
-    }
+        foreach ($row->getCellIterator() as $cell) {
+            if ($cell->getValue() == $value) {
+                $column = $cell->getColumn();
+                return $column;
+            }
+        }
 
-    public static function formatDateForFC(string $date): string
-    {
-        $dateTime = DateTime::createFromFormat('d.m.Y', $date);
-        
-        if (!$dateTime) {
-            throw new Exception('Invalid date format: ' . $date . PHP_EOL . 'Proper date format: d.m.Y' . PHP_EOL . 'An example of a proper date: 01.12.2022 or 1.12.22');
-        } 
-
-        $formattedDate = $dateTime->format('Y-m-d');
-        $year = $dateTime->format('y');
-
-        return '20' . $year . substr($formattedDate, 4);
+        throw new Exception('Column not found');
     }
 }
