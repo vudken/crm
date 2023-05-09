@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Task;
 use DateTime;
 use Exception;
 use PhpOffice\PhpSpreadsheet\Worksheet\Row;
@@ -33,22 +32,26 @@ class Util
         if (preg_match('/[Ll][Vv]-[0-9]{4}/', $address, $matches)) {
             $postalCode = $matches[0];
         }
-        
+
         return mb_strtoupper($postalCode);
     }
-    
+
     public static function formatAddress(String $address): String
     {
         return explode(',', $address)[0];
     }
-    
-    // public static function formatFcTaskForView(Task $task): Task
-    // {
-    //     // $task = $task->setAddress(explode(",", $task->getAddress())[1]);
-    //     $task = $task->setAddress(self::getPostalCodeFromAddress($task->getAddress()));
-    //     // $task = $task->setTimestamp(self::formatDate($task->getTimestamp()));
-    //     // $task = $task->setCreatedAtTimestamp(self::formatDate($task->getCreatedAtTimestamp()));
 
-    //     return $task;
-    // }
+    public static function formatDateForFC(string $date): string
+    {
+        $dateTime = DateTime::createFromFormat('d.m.Y', $date);
+        
+        if (!$dateTime) {
+            throw new Exception('Invalid date format: ' . $date . PHP_EOL . 'Proper date format: d.m.Y' . PHP_EOL . 'An example of a proper date: 01.12.2022 or 1.12.22');
+        } 
+
+        $formattedDate = $dateTime->format('Y-m-d');
+        $year = $dateTime->format('y');
+
+        return '20' . $year . substr($formattedDate, 4);
+    }
 }
