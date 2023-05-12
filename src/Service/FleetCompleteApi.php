@@ -5,6 +5,9 @@ namespace App\Service;
 use App\Entity\Task;
 use App\Enum\Email;
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\Promise;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Promise\Utils;
 use Symfony\Component\Dotenv\Dotenv;
 
 class FleetCompleteApi
@@ -17,45 +20,50 @@ class FleetCompleteApi
             // 'verify' => false,
             // 'debug' => true,
             'http_errors' => true,
+            'base_uri' => 'https://app.ecofleet.com'
         ]);
 
         $dotenv = new Dotenv();
         $dotenv->loadEnv(__DIR__ . '/../../.env');
     }
 
-    public function getTasksByEmail(string $email, $timePeriod = null): array
+    public function getTasksByEmail(string $email, string $begTimestamp, string $endTimestamp = null): Promise
     {
-        $url = 'https://app.ecofleet.com/seeme/Api/Tasks/get';
-        $params = [
+        $request = new Request('GET', '/seeme/Api/Tasks/get');
+
+        $promise = $this->client->sendAsync($request, [
             'query' => [
-                // 'begTimestamp' => date('Y-m-d', strtotime($timePeriod == null ? '-2 weeks' : $timePeriod)),
-                'begTimestamp' => '2023-03-01',
+                'begTimestamp' => Util::formatDateForFC($begTimestamp),
+                'endTimestamp' => $endTimestamp ?  Util::formatDateForFC($endTimestamp) : '',
                 'driver' => $email,
-                '__proto__' => '',
+                '_proto_' => '',
                 'key' => $_ENV['API_KEY'],
-                'json' => ''
+                'json'  => ''
             ]
-        ];
+        ])->then(function ($response) {
+            return json_decode($response->getBody(), true)['response']['tasks'];
+        });
 
-        $response = $this->client->get($url, $params);
-        $data = json_decode($response->getBody(), true);
-        $tasksData = $data['response']['tasks']['___xmlNodeValues'];
-        echo "Amount of tasks for email $email is: " . count($tasksData) . PHP_EOL;
-
-        $tasks = [];
-        foreach ($tasksData as $taskData) {
-            $tasks[] = new Task($taskData['task']);
-        }
-
-        return $tasks;
+        return $promise;
     }
 
     public function getAllTasks(): array
     {
-        $allTasks = [];
+        $promises = [];
         foreach (Email::cases() as $email) {
-            $allTasks = array_merge($allTasks, $this->getTasksByEmail($email->value));
-            sleep(5);
+            $promises[] = $this->getTasksByEmail($email->value, '01.05.2023');
+        }
+
+        $results = Utils::all($promises)->wait();
+
+        $allTasks = [];
+        foreach ($results as $data) {
+            if (!empty($data)) {
+                $data = $data['___xmlNodeValues'];
+                foreach ($data as $taskData) {
+                    $allTasks[] = new Task($taskData['task']);
+                }
+            }
         }
 
         return $allTasks;

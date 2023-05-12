@@ -2,24 +2,28 @@
 
 namespace App\Controller;
 
-use App\Enum\Email;
-use App\Service\FleetCompleteApi;
+use App\Entity\Task;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TasksController extends AbstractController
 {
-    #[Route('/tasks', name: 'tasks')]
+    private $em;
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
+    #[Route('/tasks_fc', name: 'tasks_fc')]
     public function index(): Response
     {
-        $emails = Email::cases();
-        $fc = new FleetCompleteApi();
-        $tasks = $fc->getTasksByEmail(Email::Avd->value);
-        // $tasks = $fc->getAllTasks();
-        // dd($tasks);
+        $repo =  $this->em->getRepository(Task::class);
+        $tasks = $repo->findAll();
 
-        return $this->render('tasks/index.html.twig', [
+        return $this->render('tasks/fleetcomplete.html.twig', [
+            'tasks' => $tasks
         ]);
     }
 }
